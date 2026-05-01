@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const API = 'http://localhost:3000/api';
+const API = 'https://chick-app.onrender.com/api';
 
 // ===== AUTH GUARD =====
 const token = localStorage.getItem('cm_customer_token');
@@ -29,7 +29,7 @@ async function init() {
 
   try {
     await fetch(`${API}/config`);
-  } catch(e) {}
+  } catch (e) { }
 
   await loadProducts();
   updateCartBadge();
@@ -78,8 +78,8 @@ function renderProducts() {
     return;
   }
   grid.innerHTML = products.map(p => {
-    const discount   = Math.round((1 - p.price / p.originalPrice) * 100);
-    const inCart     = cart.find(c => c.id === p.id);
+    const discount = Math.round((1 - p.price / p.originalPrice) * 100);
+    const inCart = cart.find(c => c.id === p.id);
     const badgeClass = p.badge === 'fresh' ? 'badge-fresh' : p.badge === 'popular' ? 'badge-popular' : '';
     const badgeLabel = p.badge === 'fresh' ? '✅ Fresh' : p.badge === 'popular' ? '🔥 Popular' : '';
     return `
@@ -167,7 +167,7 @@ function updateCartBadge() {
 }
 
 function renderCart() {
-  const body   = document.getElementById('cartBody');
+  const body = document.getElementById('cartBody');
   const footer = document.getElementById('cartFooter');
   if (cart.length === 0) {
     body.innerHTML = `<div class="cart-empty">
@@ -194,7 +194,7 @@ function renderCart() {
       <button class="remove-btn" onclick="removeFromCart(${item.id})" title="Remove">🗑</button>
     </div>`).join('');
   document.getElementById('cartSubtotal').textContent = `₹${subtotal}`;
-  document.getElementById('cartTotal').textContent    = `₹${subtotal}`;
+  document.getElementById('cartTotal').textContent = `₹${subtotal}`;
   footer.style.display = 'block';
 }
 
@@ -233,16 +233,16 @@ function selectPayment(radio) {
 }
 
 async function placeOrder() {
-  const name    = document.getElementById('custName').value.trim();
-  const phone   = document.getElementById('custPhone').value.trim();
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
   const address = document.getElementById('custAddress').value.trim();
   const pincode = document.getElementById('custPincode').value.trim();
   const payment = document.querySelector('input[name=payment]:checked').value;
 
-  if (!name)                      { showToast('Please enter your name', 'error'); return; }
-  if (!/^[6-9]\d{9}$/.test(phone)){ showToast('Enter valid 10-digit Indian mobile number', 'error'); return; }
-  if (!address)                   { showToast('Please enter delivery address', 'error'); return; }
-  if (!/^\d{6}$/.test(pincode))   { showToast('Enter valid 6-digit pincode', 'error'); return; }
+  if (!name) { showToast('Please enter your name', 'error'); return; }
+  if (!/^[6-9]\d{9}$/.test(phone)) { showToast('Enter valid 10-digit Indian mobile number', 'error'); return; }
+  if (!address) { showToast('Please enter delivery address', 'error'); return; }
+  if (!/^\d{6}$/.test(pincode)) { showToast('Enter valid 6-digit pincode', 'error'); return; }
 
   const items = cart.map(({ id, name, price, qty, weight, image }) => ({ id, name, price, qty, weight, image }));
 
@@ -260,7 +260,7 @@ async function placeOrder() {
     const subtotal = cart.reduce((a, c) => a + c.price * c.qty, 0);
 
     const payLabels = { cod: 'Cash on Delivery' };
-    document.getElementById('orderId').textContent  = `Order ID: ${data.order.orderId}`;
+    document.getElementById('orderId').textContent = `Order ID: ${data.order.orderId}`;
     document.getElementById('successMsg').textContent = `Amount: ₹${data.order.total} | Cash on Delivery`;
     cart = []; saveCart(); renderCart(); updateCartBadge();
     closeCheckout();
@@ -275,7 +275,7 @@ async function placeOrder() {
 function closeSuccess() {
   document.getElementById('successOverlay').classList.remove('open');
   document.body.style.overflow = '';
-  ['custName','custPhone','custAddress','custPincode'].forEach(id => document.getElementById(id).value = '');
+  ['custName', 'custPhone', 'custAddress', 'custPincode'].forEach(id => document.getElementById(id).value = '');
 }
 
 // ===== TOAST =====

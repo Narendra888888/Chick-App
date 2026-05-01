@@ -1,5 +1,5 @@
 // ===== CONFIG =====
-const API = 'http://localhost:3000/api';
+const API = 'https://chick-app.onrender.com/api';
 
 // ===== ADMIN AUTH GUARD =====
 const adminToken = localStorage.getItem('cm_admin_token');
@@ -28,7 +28,7 @@ async function init() {
 
 // ===== NAV =====
 function showSection(name) {
-  ['overview','add','manage','orders'].forEach(s => {
+  ['overview', 'add', 'manage', 'orders'].forEach(s => {
     document.getElementById('section-' + s).style.display = 'none';
     const nav = document.getElementById('nav-' + s);
     if (nav) nav.classList.remove('active');
@@ -37,19 +37,19 @@ function showSection(name) {
   const nav = document.getElementById('nav-' + name);
   if (nav) nav.classList.add('active');
   if (name === 'overview') renderOverview();
-  if (name === 'manage')   renderManageTable();
-  if (name === 'orders')   renderOrders();
+  if (name === 'manage') renderManageTable();
+  if (name === 'orders') renderOrders();
 }
 
 // ===== STATS / OVERVIEW =====
 async function renderOverview() {
   try {
     const [statsRes, ordersRes] = await Promise.all([
-      fetch(`${API}/stats`,  { headers: adminHeaders() }),
+      fetch(`${API}/stats`, { headers: adminHeaders() }),
       fetch(`${API}/orders`, { headers: adminHeaders() })
     ]);
     if (statsRes.status === 401 || statsRes.status === 403) { adminLogout(); return; }
-    const { stats }  = await statsRes.json();
+    const { stats } = await statsRes.json();
     const { orders } = await ordersRes.json();
 
     document.getElementById('statsRow').innerHTML = `
@@ -97,16 +97,16 @@ async function addProduct(e) {
   if (!imageFile) { showToast('Please upload a product image', 'error'); return; }
 
   const formData = new FormData();
-  formData.append('name',          document.getElementById('pName').value.trim());
-  formData.append('category',      document.getElementById('pCategory').value);
-  formData.append('price',         document.getElementById('pPrice').value);
+  formData.append('name', document.getElementById('pName').value.trim());
+  formData.append('category', document.getElementById('pCategory').value);
+  formData.append('price', document.getElementById('pPrice').value);
   formData.append('originalPrice', document.getElementById('pOriginalPrice').value);
-  formData.append('weight',        document.getElementById('pWeight').value.trim());
-  formData.append('badge',         document.getElementById('pBadge').value);
-  formData.append('image',         imageFile);
+  formData.append('weight', document.getElementById('pWeight').value.trim());
+  formData.append('badge', document.getElementById('pBadge').value);
+  formData.append('image', imageFile);
 
   try {
-    const res  = await fetch(`${API}/products`, { method: 'POST', headers: adminHeaders(), body: formData });
+    const res = await fetch(`${API}/products`, { method: 'POST', headers: adminHeaders(), body: formData });
     if (res.status === 401 || res.status === 403) { adminLogout(); return; }
     const data = await res.json();
     if (!data.success) { showToast(data.message, 'error'); return; }
@@ -126,8 +126,8 @@ function previewImage(input) {
 }
 
 function resetAddForm() {
-  ['pName','pPrice','pOriginalPrice','pWeight'].forEach(id => document.getElementById(id).value = '');
-  ['pCategory','pBadge'].forEach(id => document.getElementById(id).value = '');
+  ['pName', 'pPrice', 'pOriginalPrice', 'pWeight'].forEach(id => document.getElementById(id).value = '');
+  ['pCategory', 'pBadge'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('pImage').value = '';
   document.getElementById('imgPreview').style.display = 'none';
 }
@@ -180,14 +180,14 @@ function openEdit(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
   editTarget = p;
-  document.getElementById('editId').value            = id;
-  document.getElementById('editName').value          = p.name;
-  document.getElementById('editCategory').value      = p.category;
-  document.getElementById('editPrice').value         = p.price;
+  document.getElementById('editId').value = id;
+  document.getElementById('editName').value = p.name;
+  document.getElementById('editCategory').value = p.category;
+  document.getElementById('editPrice').value = p.price;
   document.getElementById('editOriginalPrice').value = p.originalPrice;
-  document.getElementById('editWeight').value        = p.weight;
-  document.getElementById('editBadge').value         = p.badge || '';
-  document.getElementById('editImgPreview').src      = p.image;
+  document.getElementById('editWeight').value = p.weight;
+  document.getElementById('editBadge').value = p.badge || '';
+  document.getElementById('editImgPreview').src = p.image;
   document.getElementById('editOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -204,23 +204,23 @@ function previewEditImage(input) {
 
 async function saveEdit(e) {
   e.preventDefault();
-  const id    = document.getElementById('editId').value;
+  const id = document.getElementById('editId').value;
   const price = Number(document.getElementById('editPrice').value);
-  const orig  = Number(document.getElementById('editOriginalPrice').value);
+  const orig = Number(document.getElementById('editOriginalPrice').value);
   if (price >= orig) { showToast('Original price must be higher', 'error'); return; }
 
   const formData = new FormData();
-  formData.append('name',          document.getElementById('editName').value.trim());
-  formData.append('category',      document.getElementById('editCategory').value);
-  formData.append('price',         price);
+  formData.append('name', document.getElementById('editName').value.trim());
+  formData.append('category', document.getElementById('editCategory').value);
+  formData.append('price', price);
   formData.append('originalPrice', orig);
-  formData.append('weight',        document.getElementById('editWeight').value.trim());
-  formData.append('badge',         document.getElementById('editBadge').value);
+  formData.append('weight', document.getElementById('editWeight').value.trim());
+  formData.append('badge', document.getElementById('editBadge').value);
   const imgFile = document.getElementById('editImage').files[0];
   if (imgFile) formData.append('image', imgFile);
 
   try {
-    const res  = await fetch(`${API}/products/${id}`, { method: 'PUT', headers: adminHeaders(), body: formData });
+    const res = await fetch(`${API}/products/${id}`, { method: 'PUT', headers: adminHeaders(), body: formData });
     if (res.status === 401 || res.status === 403) { adminLogout(); return; }
     const data = await res.json();
     if (!data.success) { showToast(data.message, 'error'); return; }
