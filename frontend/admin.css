@@ -318,16 +318,56 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .admin-sidebar { display: none; }
-  .add-form { grid-template-columns: 1fr; }
-  .edit-form { grid-template-columns: 1fr; }
+  .admin-layout { flex-direction: column; min-height: auto; }
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 60px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 10px;
+    gap: 8px;
+    z-index: 99;
+    scrollbar-width: none;
+  }
+  .admin-sidebar::-webkit-scrollbar { display: none; }
+  .sidebar-section { margin-bottom: 0; display: flex; gap: 8px; }
+  .sidebar-heading { display: none; }
+  .sidebar-item { 
+    padding: 8px 14px; 
+    font-size: 13px; 
+    border-left: none; 
+    border-radius: 20px; 
+    background: #f8f9fa;
+    border: 1px solid var(--border); 
+    white-space: nowrap; 
+  }
+  .sidebar-item.active { 
+    border-color: var(--primary); 
+    background: var(--primary); 
+    color: #fff; 
+  }
+  .sidebar-item:hover { background: #e8f0fe; color: var(--primary); }
+  .sidebar-item.active:hover { background: var(--primary); color: #fff; }
+
+  .add-form, .edit-form { grid-template-columns: 1fr; }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
   .admin-main { padding: 12px; }
-  .product-table th:nth-child(3), .product-table td:nth-child(3) { display: none; }
+  .product-table th, .product-table td { padding: 10px 8px; font-size: 13px; }
+  .table-actions { flex-direction: column; gap: 4px; }
 }
+
 @media (max-width: 480px) {
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .stat-value { font-size: 22px; }
+  .admin-header { padding: 0 12px; }
+  .admin-logo { font-size: 16px; }
+  .admin-logo span { display: none; }
+  .btn-view-store { font-size: 11px; padding: 6px 10px; margin-left: 4px !important; }
+  .stat-value { font-size: 20px; }
+  .product-table { min-width: 500px; } /* forces scroll on small screens */
 }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
