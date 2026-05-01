@@ -265,6 +265,9 @@ async function placeOrder() {
     cart = []; saveCart(); renderCart(); updateCartBadge();
     closeCheckout();
     document.getElementById('successOverlay').classList.add('open');
+    setTimeout(() => {
+      alert("మీ ఆర్డర్ కన్ఫర్మ్ చేయడానికి లేదా మీకు ఏమైనా కావాలంటే దయచేసి ఈ నెంబర్ కి కాల్ చేయండి: 8125824346");
+    }, 300);
 
 
   } catch {
