@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – ChickenMart</title>
+  <meta name="description" content="Login or register to start shopping fresh chicken and mutton."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a3a6c 0%, #2874f0 60%, #003087 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #2874f0, #003087);
+      padding: 28px 24px 20px;
+      text-align: center;
+    }
+    .logo { font-size: 32px; margin-bottom: 6px; }
+    .logo-text { font-size: 22px; font-weight: 800; color: #fff; }
+    .logo-sub  { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    .tab {
+      flex: 1;
+      padding: 14px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #878787;
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+    }
+    .tab.active { color: #2874f0; border-bottom-color: #2874f0; }
+
+    .tab-content { display: none; padding: 24px; }
+    .tab-content.active { display: block; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: #2874f0; }
+
+    .btn {
+      width: 100%;
+      background: #2874f0;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .btn:hover { background: #1a5dc0; transform: translateY(-1px); }
+    .btn:disabled { background: #b0c4de; cursor: not-allowed; transform: none; }
+
+    .err-msg {
+      background: #fde8e8;
+      color: #c0392b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .err-msg.show { display: block; }
+    .ok-msg {
+      background: #e8f5e9;
+      color: #27ae60;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .ok-msg.show { display: block; }
+
+    .policy {
+      font-size: 12px;
+      color: #878787;
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    .footer-note {
+      background: #f8f9fa;
+      padding: 12px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #878787;
+      border-top: 1px solid #f0f0f0;
+    }
+    .footer-note a { color: #2874f0; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <div class="logo">🐔</div>
+    <div class="logo-text">ChickenMart</div>
+    <div class="logo-sub">Fresh Chicken & Mutton Delivered</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+    <button class="tab" id="tab-register" onclick="switchTab('register')">New Account</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="tab-content active" id="pane-login">
+    <div class="err-msg" id="loginErr"></div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="loginPhone" placeholder="10-digit mobile number" maxlength="10"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn" id="loginBtn" onclick="doLogin()">Login & Shop →</button>
+    <p class="policy">By continuing you agree to our Terms & Privacy Policy</p>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="tab-content" id="pane-register">
+    <div class="err-msg" id="regErr"></div>
+    <div class="ok-msg" id="regOk">Account created! Logging you in…</div>
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="regName" placeholder="Enter your full name"/>
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="regPhone" placeholder="10-digit mobile number" maxlength="10"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="regPass" placeholder="Create a password (min 6 chars)"/>
+    </div>
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" id="regPass2" placeholder="Repeat password" onkeydown="if(event.key==='Enter')doRegister()"/>
+    </div>
+    <button class="btn" id="regBtn" onclick="doRegister()">Create Account →</button>
+  </div>
+
+  <div class="footer-note">Admin? <a href="admin-login.html">Admin Login →</a></div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+function switchTab(tab) {
+  ['login','register'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+    document.getElementById('pane-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+// Redirect if already logged in
+const tok = localStorage.getItem('cm_customer_token');
+if (tok) window.location.href = 'index.html';
+
+async function doLogin() {
+  const phone    = document.getElementById('loginPhone').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const errEl    = document.getElementById('loginErr');
+  const btn      = document.getElementById('loginBtn');
+  errEl.classList.remove('show');
+
+  if (!/^[6-9]\d{9}$/.test(phone)) { errEl.textContent = 'Enter valid 10-digit Indian phone number'; errEl.classList.add('show'); return; }
+  if (!password)                { errEl.textContent = 'Enter your password'; errEl.classList.add('show'); return; }
+
+  btn.disabled = true; btn.textContent = 'Logging in…';
+  try {
+    const res  = await fetch(`${API}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, password }) });
+    const data = await res.json();
+    if (!data.success) { errEl.textContent = data.message; errEl.classList.add('show'); return; }
+    localStorage.setItem('cm_customer_token', data.token);
+    localStorage.setItem('cm_customer_name',  data.name);
+    window.location.href = 'index.html';
+  } catch {
+    errEl.textContent = 'Server error — is the server running?'; errEl.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Login & Shop →';
+  }
+}
+
+async function doRegister() {
+  const name     = document.getElementById('regName').value.trim();
+  const phone    = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPass').value;
+  const pass2    = document.getElementById('regPass2').value;
+  const errEl    = document.getElementById('regErr');
+  const okEl     = document.getElementById('regOk');
+  const btn      = document.getElementById('regBtn');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+
+  if (!name)                           { errEl.textContent = 'Enter your name'; errEl.classList.add('show'); return; }
+  if (!/^[6-9]\d{9}$/.test(phone))     { errEl.textContent = 'Enter valid 10-digit Indian phone number'; errEl.classList.add('show'); return; }
+  if (password.length < 6)             { errEl.textContent = 'Password must be at least 6 characters'; errEl.classList.add('show'); return; }
+  if (password !== pass2)              { errEl.textContent = 'Passwords do not match'; errEl.classList.add('show'); return; }
+
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  try {
+    const res  = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, phone, password }) });
+    const data = await res.json();
+    if (!data.success) { errEl.textContent = data.message; errEl.classList.add('show'); return; }
+    okEl.classList.add('show');
+    localStorage.setItem('cm_customer_token', data.token);
+    localStorage.setItem('cm_customer_name',  data.name);
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  } catch {
+    errEl.textContent = 'Server error — is the server running?'; errEl.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Create Account →';
+  }
+}
+</script>
+</body>
+</html>

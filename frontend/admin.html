@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel – ChickenMart</title>
+  <link rel="stylesheet" href="admin.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙</text></svg>"/>
+</head>
+<body>
+
+<!-- ADMIN HEADER -->
+<header class="admin-header">
+  <div class="admin-logo">
+    ⚙ ChickenMart
+    <span>Admin Dashboard</span>
+  </div>
+  <div class="header-right">
+    <a class="btn-view-store" href="index.html">🛍 View Store</a>
+    <button class="btn-view-store" onclick="adminLogout()" style="background:#e74c3c;border:none;cursor:pointer;margin-left:6px">⏻ Logout</button>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Dashboard</div>
+      <div class="sidebar-item active" id="nav-overview" onclick="showSection('overview')">
+        <span class="icon">📊</span> Overview
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Products</div>
+      <div class="sidebar-item" id="nav-add" onclick="showSection('add')">
+        <span class="icon">➕</span> Add Product
+      </div>
+      <div class="sidebar-item" id="nav-manage" onclick="showSection('manage')">
+        <span class="icon">📦</span> Manage Products
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Orders</div>
+      <div class="sidebar-item" id="nav-orders" onclick="showSection('orders')">
+        <span class="icon">🛒</span> View Orders
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- OVERVIEW -->
+    <div id="section-overview">
+      <div class="stats-row" id="statsRow"></div>
+      <div class="section-card">
+        <div class="section-card-header">
+          <h2>📋 Recent Orders</h2>
+        </div>
+        <div class="section-card-body">
+          <div id="recentOrdersList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD PRODUCT -->
+    <div id="section-add" style="display:none">
+      <div class="section-card">
+        <div class="section-card-header">
+          <h2>➕ Add New Product</h2>
+        </div>
+        <div class="section-card-body">
+          <form class="add-form" onsubmit="addProduct(event)">
+
+            <div class="form-group">
+              <label>Product Name *</label>
+              <input type="text" id="pName" placeholder="e.g. Whole Chicken" required/>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="pCategory" required>
+                <option value="">-- Select --</option>
+                <option value="chicken">🐔 Chicken</option>
+                <option value="mutton">🐑 Mutton</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price (₹) *</label>
+              <input type="number" id="pPrice" placeholder="e.g. 220" min="1" required/>
+            </div>
+            <div class="form-group">
+              <label>Original Price (₹) *</label>
+              <input type="number" id="pOriginalPrice" placeholder="e.g. 280" min="1" required/>
+            </div>
+            <div class="form-group">
+              <label>Weight / Quantity *</label>
+              <input type="text" id="pWeight" placeholder="e.g. 500 g, 1 kg" required/>
+            </div>
+            <div class="form-group">
+              <label>Badge</label>
+              <select id="pBadge">
+                <option value="">None</option>
+                <option value="fresh">✅ Fresh</option>
+                <option value="popular">🔥 Popular</option>
+              </select>
+            </div>
+            <div class="form-group form-col-full">
+              <label>Product Image *</label>
+              <div class="img-upload-box" id="uploadBox">
+                <input type="file" id="pImage" accept="image/*" onchange="previewImage(this)"/>
+                <div class="img-upload-icon">📷</div>
+                <div class="img-upload-text">Click to upload image (JPG, PNG, WEBP)</div>
+                <img id="imgPreview" class="img-preview" style="display:none"/>
+              </div>
+            </div>
+
+            <div class="form-col-full" style="display:flex;gap:10px;justify-content:flex-end">
+              <button type="button" class="btn-secondary" onclick="resetAddForm()">Reset</button>
+              <button type="submit" class="btn-primary">➕ Add Product</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE PRODUCTS -->
+    <div id="section-manage" style="display:none">
+      <div class="section-card">
+        <div class="section-card-header">
+          <h2>📦 All Products</h2>
+          <div style="display:flex;gap:8px">
+            <select id="filterCat" onchange="renderManageTable()" style="border:1.5px solid #e0e0e0;border-radius:6px;padding:6px 10px;font-size:13px;font-family:inherit;">
+              <option value="all">All Categories</option>
+              <option value="chicken">Chicken</option>
+              <option value="mutton">Mutton</option>
+            </select>
+          </div>
+        </div>
+        <div class="section-card-body" style="overflow-x:auto">
+          <table class="product-table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Weight</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="section-orders" style="display:none">
+      <div class="section-card">
+        <div class="section-card-header">
+          <h2>🛒 All Orders</h2>
+          <button class="btn-danger" onclick="clearOrders()">🗑 Clear All</button>
+        </div>
+        <div class="section-card-body" style="overflow-x:auto" id="ordersSection"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✏️ Edit Product</h2>
+      <button class="modal-close" onclick="closeEdit()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form class="edit-form" onsubmit="saveEdit(event)">
+        <input type="hidden" id="editId"/>
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" id="editName" required/>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="editCategory" required>
+            <option value="chicken">🐔 Chicken</option>
+            <option value="mutton">🐑 Mutton</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Price (₹) *</label>
+          <input type="number" id="editPrice" min="1" required/>
+        </div>
+        <div class="form-group">
+          <label>Original Price (₹) *</label>
+          <input type="number" id="editOriginalPrice" min="1" required/>
+        </div>
+        <div class="form-group">
+          <label>Weight *</label>
+          <input type="text" id="editWeight" required/>
+        </div>
+        <div class="form-group">
+          <label>Badge</label>
+          <select id="editBadge">
+            <option value="">None</option>
+            <option value="fresh">✅ Fresh</option>
+            <option value="popular">🔥 Popular</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Change Image</label>
+          <div class="img-upload-box">
+            <input type="file" id="editImage" accept="image/*" onchange="previewEditImage(this)"/>
+            <img id="editImgPreview" class="img-preview" style="height:80px;width:80px"/>
+            <div class="img-upload-text" style="margin-top:8px">Click to change image</div>
+          </div>
+        </div>
+        <div style="grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn-secondary" onclick="closeEdit()">Cancel</button>
+          <button type="submit" class="btn-success">💾 Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="admin.js"></script>
+</body>
+</html>

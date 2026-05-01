@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChickenMart – Fresh Chicken & Mutton</title>
+  <meta name="description"
+    content="Order fresh chicken and mutton online. Home delivery with Cash on Delivery available." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐔</text></svg>" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-top">
+      <a class="logo" href="index.html">
+        <span class="logo-text">🐔Sayyeds Chicken & mutton Mart</span>
+        <span class="logo-sub">Fresh. Clean. Delivered.</span>
+      </a>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search chicken, mutton..." autocomplete="off" />
+        <button onclick="searchProducts()">🔍</button>
+      </div>
+      <div class="header-actions">
+        <span id="greetUser"
+          style="color:#a8c7ff;font-size:13px;font-weight:500;white-space:nowrap;display:none"></span>
+        <button class="btn-cart" id="cartBtn" onclick="openCart()">
+          🛒 Cart
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+        <button class="btn-admin" onclick="logout()" style="background:#e74c3c">⏻ Logout</button>
+        <button class="btn-admin-mobile" onclick="logout()" title="Logout"
+          style="background:#e74c3c;font-size:14px">⏻</button>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <button class="nav-chip active" id="chip-all" onclick="filterCategory('all')">All</button>
+      <button class="nav-chip" id="chip-chicken" onclick="filterCategory('chicken')">🐔 Chicken</button>
+      <button class="nav-chip" id="chip-mutton" onclick="filterCategory('mutton')">🐑 Mutton</button>
+      <button class="nav-chip" id="chip-fresh" onclick="filterCategory('fresh')">✅ Fresh Today</button>
+    </div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h1>Farm Fresh<br />Chicken & Mutton</h1>
+      <p>Delivered fresh to your doorstep</p>
+      <span class="hero-badge">🚚 Cash on Delivery Available</span>
+    </div>
+    <div class="hero-images">
+      <img src="images/chicken_hero.png" alt="Fresh Chicken" class="hero-img" />
+      <img src="images/mutton_hero.png" alt="Fresh Mutton" class="hero-img" />
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <main class="main-container">
+    <div class="section-header">
+      <h2 class="section-title" id="sectionTitle">All Products</h2>
+      <span id="productCount" style="font-size:13px;color:#878787"></span>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Products rendered by JS -->
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">🐔 Sayyeds ChickenMart</div>
+    <p>Fresh Chicken &amp; Mutton — Home Delivery</p>
+    <p>📞 7569507287 | 🚚 Cash on Delivery</p>
+    <div class="footer-links">
+      <a href="#" onclick="openModal('privacyModal')">Privacy Policy</a>
+      <a href="#" onclick="openModal('contactModal')">Contact Us</a>
+    </div>
+  </footer>
+
+  <!-- PRIVACY POLICY MODAL -->
+  <div class="modal-overlay" id="privacyModal" onclick="closeModal('privacyModal')">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:480px">
+      <div class="modal-header">
+        <h2>📜 Privacy Policy</h2>
+        <button class="modal-close" onclick="closeModal('privacyModal')">&#x2715;</button>
+      </div>
+      <div class="modal-body" style="font-size:14px;line-height:1.7;color:#444">
+        <p><strong>Sayyeds Chicken &amp; Mutton Mart</strong> మీ privacy ని respect చేస్తుంది.</p>
+        <br>
+        <p><strong>📁 మేము collect చేసే information:</strong></p>
+        <ul style="padding-left:18px;margin:8px 0">
+          <li>మీ పేరు మరియు phone number (order కోసం)</li>
+          <li>Delivery address మరియు pincode</li>
+        </ul>
+        <br>
+        <p><strong>🔒 Data ఎలా వాడతాం:</strong></p>
+        <ul style="padding-left:18px;margin:8px 0">
+          <li>Order process మరియు delivery కోసం మాత్రమే</li>
+          <li>మీ data third parties కి share చేయం</li>
+          <li>Order complete అయిన తర్వాత data secure గా ఉంటుంది</li>
+        </ul>
+        <br>
+        <p><strong>📞 Questions ఉంటే:</strong> 7569507287 కి call చేయండి.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT US MODAL -->
+  <div class="modal-overlay" id="contactModal" onclick="closeModal('contactModal')">
+    <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+      <div class="modal-header">
+        <h2>📞 Contact Us</h2>
+        <button class="modal-close" onclick="closeModal('contactModal')">&#x2715;</button>
+      </div>
+      <div class="modal-body" style="font-size:14px;line-height:2;color:#444">
+        <p style="font-size:16px;font-weight:700;color:#222;margin-bottom:12px">🐔 Sayyeds Chicken &amp; Mutton Mart</p>
+        <p>📞 <strong>Phone:</strong> <a href="tel:7569507287" style="color:#1a73e8;font-weight:600">7569507287</a></p>
+        <p>⏰ <strong>Shop Timings:</strong> Morning 6AM – Night 9PM</p>
+        <p>🚚 <strong>Delivery:</strong> Cash on Delivery</p>
+        <p>👍 <strong>Fresh Stock:</strong> Daily</p>
+        <br>
+        <a href="tel:7569507287"
+          style="background:#27ae60;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:700;font-size:15px;">
+          📲 Call Now
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 My Cart</h2>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-summary-row"><span>Subtotal</span><span id="cartSubtotal">₹0</span></div>
+      <div class="cart-summary-row"><span>Delivery</span><span style="color:#27ae60">FREE</span></div>
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">₹0</span></div>
+      <button class="btn-checkout" onclick="openCheckout()">Place Order →</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-overlay" id="checkoutOverlay">
+    <div class="modal" id="checkoutModal">
+      <div class="modal-header">
+        <h2>🏠 Delivery & Payment</h2>
+        <button class="modal-close" onclick="closeCheckout()">✕</button>
+      </div>
+      <div class="modal-body" id="checkoutBody">
+
+        <div class="form-section">
+          <div class="form-section-title">📦 Order Summary</div>
+          <div class="order-summary-box" id="orderSummaryBox"></div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">👤 Delivery Details</div>
+          <div class="form-group">
+            <label for="custName">Full Name *</label>
+            <input type="text" id="custName" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label for="custPhone">Phone Number *</label>
+            <input type="tel" id="custPhone" placeholder="10-digit mobile number" maxlength="10" />
+          </div>
+          <div class="form-group">
+            <label for="custAddress">Delivery Address *</label>
+            <textarea id="custAddress" placeholder="House No, Street, Area, City..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="custPincode">Pincode *</label>
+            <input type="text" id="custPincode" placeholder="6-digit pincode" maxlength="6" />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">💳 Payment Method</div>
+          <div class="payment-options">
+            <label class="payment-option selected" id="opt-cod">
+              <input type="radio" name="payment" value="cod" checked />
+              <div>
+                <div class="payment-option-label">💵 Cash on Delivery</div>
+                <div class="payment-option-desc">Pay in cash when order arrives</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn-place-order" onclick="placeOrder()">🛒 PLACE ORDER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successOverlay">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="success-modal">
+          <span class="success-icon">✅</span>
+          <h2>Order Placed!</h2>
+          <p>Thank you for your order.</p>
+          <div class="order-id" id="orderId"></div>
+          <p id="successMsg"></p>
+          <button class="btn-continue" onclick="closeSuccess()">Continue Shopping</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
