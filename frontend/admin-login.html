@@ -17,6 +17,7 @@
       padding: 16px;
     }
     .card {
+      position: relative;
       background: #fff;
       border-radius: 16px;
       width: 100%;
@@ -24,6 +25,26 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.4);
       overflow: hidden;
     }
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.25); }
+
     .card-header {
       background: linear-gradient(135deg, #172337, #2c3e50);
       padding: 28px 24px;
@@ -94,10 +115,35 @@
       color: #856404;
       margin-bottom: 16px;
     }
+
+    /* Mobile adjustments */
+    @media (max-width: 480px) {
+      body {
+        align-items: flex-start;
+        padding: 0;
+      }
+      .card {
+        min-height: 100vh;
+        max-width: none;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        padding-top: 30px; /* Space for mobile status bar */
+      }
+      .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .btn {
+        margin-top: auto;
+      }
+    }
   </style>
 </head>
 <body>
 <div class="card">
+  <button class="back-btn" onclick="window.location.href='login.html'" title="Go Back">←</button>
   <div class="card-header">
     <div class="shield">🛡️</div>
     <div class="logo-text">Admin Portal</div>
