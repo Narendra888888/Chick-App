@@ -856,6 +856,7 @@ body {
 @media (max-width: 480px) {
 
   /* Header */
+  .header { padding-top: 25px; } /* Space for mobile status bar */
   .header-top { padding: 8px 10px; gap: 6px; }
   .logo-text { font-size: 13px; }
   .btn-cart { padding: 7px 10px; font-size: 13px; }

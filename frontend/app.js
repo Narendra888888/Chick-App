@@ -198,15 +198,45 @@ function renderCart() {
   footer.style.display = 'block';
 }
 
+// ===== MODALS (Privacy / Contact) =====
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  history.pushState({ modal: id }, null, "");
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (!document.querySelector('.modal-overlay.open') && !document.querySelector('.cart-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+}
+
+// Global back button handler for hardware back button
+window.onpopstate = function(event) {
+  closeAllOverlays();
+};
+
+function closeAllOverlays() {
+  // Close all possible overlays
+  closeCart();
+  closeCheckout();
+  closeSuccess();
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+  document.body.style.overflow = '';
+}
+
 function openCart() {
   document.getElementById('cartOverlay').classList.add('open');
   document.getElementById('cartSidebar').classList.add('open');
   document.body.style.overflow = 'hidden';
+  history.pushState({ modal: 'cart' }, null, "");
 }
 function closeCart() {
   document.getElementById('cartOverlay').classList.remove('open');
   document.getElementById('cartSidebar').classList.remove('open');
-  document.body.style.overflow = '';
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
 }
 
 // ===== CHECKOUT =====
@@ -221,15 +251,13 @@ function openCheckout() {
   closeCart();
   document.getElementById('checkoutOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  history.pushState({ modal: 'checkout' }, null, "");
 }
 function closeCheckout() {
   document.getElementById('checkoutOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function selectPayment(radio) {
-  document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
-  radio.closest('.payment-option').classList.add('selected');
+  if (!document.querySelector('.modal-overlay.open') && !document.querySelector('.cart-overlay.open')) {
+    document.body.style.overflow = '';
+  }
 }
 
 async function placeOrder() {
@@ -265,6 +293,7 @@ async function placeOrder() {
     cart = []; saveCart(); renderCart(); updateCartBadge();
     closeCheckout();
     document.getElementById('successOverlay').classList.add('open');
+    history.pushState({ modal: 'success' }, null, "");
     setTimeout(() => {
       alert("మీ ఆర్డర్ కన్ఫర్మ్ చేయడానికి లేదా మీకు ఏమైనా కావాలంటే దయచేసి ఈ నెంబర్ కి కాల్ చేయండి: 8125824346");
     }, 300);
@@ -275,31 +304,6 @@ async function placeOrder() {
   }
 }
 
-function closeSuccess() {
-  document.getElementById('successOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  ['custName', 'custPhone', 'custAddress', 'custPincode'].forEach(id => document.getElementById(id).value = '');
-}
-
-// ===== TOAST =====
-function showToast(msg, type = '') {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 2600);
-}
-
-// ===== MODALS (Privacy / Contact) =====
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
 
 // ===== START =====
 init();
